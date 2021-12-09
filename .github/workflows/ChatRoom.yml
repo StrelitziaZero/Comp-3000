@@ -40,4 +40,5 @@ jobs:
           
       - name: Run code
         run: |
-          client.html
+         npm install
+         npm run build
