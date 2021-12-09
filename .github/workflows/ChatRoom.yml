@@ -40,5 +40,4 @@ jobs:
           
       - name: Run code
         run: |
-         npm install
-         npm run build
+         cat client.html
