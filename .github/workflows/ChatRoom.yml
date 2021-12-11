@@ -38,6 +38,14 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
           
-      - name: Run code
+      - name: Run Server
+        run: |
+         cat server.js
+          
+      - name: Run Client
         run: |
          cat client.html
+         
+#       - name: test code
+#         run: |
+#          cat mytest.js
