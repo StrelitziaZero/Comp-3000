@@ -33,6 +33,61 @@
         padding: 20px;
         text-align:center;
       } 
+      .btn{
+        background-color: #00c8fa; 
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px      ;
+        border-radius: 8px;
+        border: 2px solid #05fd26;
+        -webkit-transition-duration: 0.4s; 
+        transition-duration: 0.4s;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+      }
+      .btn:hover {
+        background-color: #af4c6d; 
+        color: white;
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.40), 0 20px 50px 0 rgba(0,0,0,0.19);
+      }
+      .btn2{
+        background-color: #00fa2a; 
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px      ;
+        border-radius: 8px;
+        border: 2px solid #3528eb;
+        -webkit-transition-duration: 0.4s; /* Safari */
+        transition-duration: 0.4s;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+      }
+      .btn2:hover {
+        background-color: #0066ff; 
+        color: white;
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.40), 0 20px 50px 0 rgba(0,0,0,0.19);
+      }
+      .ipt{
+        background-color: #fafafa; 
+        border-radius: 8px;
+        height: 30px;
+      }
+      .span-1{
+        font-size: 15px;
+        color: rgb(0, 243, 170);
+      }
+      .span-2{
+        font-size: 20px;
+        color: rgb(0, 0, 0);
+      }
+       .user{
+        margin: 50px;
+        text-align:center
+      }    
   </style>
     <title class="tit">Chat Room</title>
 </head>
@@ -59,14 +114,41 @@
     <script>
       var ws=null;
       document.getElementById('setname').onclick = function() {
-        var name = document.getElementById('name').value;
-        if(name === '')return console.log("Name is null");
-        ws = new WebSocket('ws://localhost:8888');
-        ws.onopen = function(){
+         var name = document.getElementById('name').value;
+         var time1= new Date().format("yyyy/MM/dd hh:mm:ss");
 
-        }
-        
-      }
+          if(name === '')return console.log("Name is null");
+           
+          ws = new WebSocket('ws://localhost:8888');
+           
+          //Triggered when the connection is established
+           ws.onopen = function(){
+
+
+
+            //Send a message to the server
+            ws.send(JSON.stringify({
+                name:name,
+                time:time1,
+                type:'setname'
+            }));
+          }
+
+            document.getElementById('btn').onclick = send;
+            document.getElementById('text').onkeyup = function(e) {
+                if(e.keyCode !== 13) return;
+                send();
+            }
+
+       //Automatically receive the data returned by the server
+       ws.onmessage = function(e){   
+          var con = document.getElementById('backinfo');
+         con.insertBefore(autocreate(JSON.parse(e.data)),con.children[0]);
+       }
+       //Will join the room button setting is not available (can only join once)
+       document.getElementById('setname').setAttribute('disabled',true);
+       document.getElementById('name').setAttribute('disabled',true);
+    }
        
 
     </script>
