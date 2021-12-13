@@ -149,6 +149,29 @@
        document.getElementById('setname').setAttribute('disabled',true);
        document.getElementById('name').setAttribute('disabled',true);
     }
+
+    function autocreate(data) {
+            var name = data.name;
+            var text = data.text;
+            var time = data.time;
+
+            var div = document.createElement('div');
+            var span1= document.createElement('span1');
+            var span2= document.createElement('span2');
+
+            span1.innerHTML = name + ' ' + time;
+            span2.innerHTML = text;
+   
+
+            div.appendChild(span1);
+            div.appendChild(document.createElement('br'));
+            div.appendChild(span2);
+            //span2.setAttribute("id",text);
+            span1.setAttribute("class","span-1");
+            span2.setAttribute("class","span-2");
+            span2.setAttribute("id","2span");
+            return div;
+        }
        
 
     </script>
