@@ -1,4 +1,5 @@
-
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/";
 
 var nwt=require('nodejs-websocket');
  var server=nwt.createServer(function(conn){
@@ -18,6 +19,21 @@ var nwt=require('nodejs-websocket');
             text: data.name + ' join into chat' ,
             time: data.time,         
           }));
+          MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var database1 = db.db("data1");
+            var mydb =  [
+                { 
+                text: data.name + ' join into chat' ,
+                time: data.time
+               }
+               ];
+            database1.collection("site").insertMany(mydb, function(err, res) {
+                if (err) throw err;
+                console.log("Insert documents num: " + res.insertedCount);
+                db.close();
+            });
+          });
            break;
         case 'chat':        
             sendevery(JSON.stringify({
@@ -56,6 +72,21 @@ var nwt=require('nodejs-websocket');
       text: conn.rename + ' Leave chat',
       time: conn.clotime
     }));
+    MongoClient.connect(url, function(err, db) {
+      if (err) throw err;
+      var database1 = db.db("data1");
+      var mydb =  [
+          { 
+          text: conn.rename + ' leave chat' ,
+          time: conn.clotime
+         }
+         ];
+      database1.collection("site").insertMany(mydb, function(err, res) {
+          if (err) throw err;
+          console.log("Insert documents num: " + res.insertedCount);
+          db.close();
+      });
+    });
    });
      //Send error when client is closed
      conn.on('error',function(err){
