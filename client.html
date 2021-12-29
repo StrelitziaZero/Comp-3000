@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -92,28 +94,31 @@
     <title class="tit">Chat Room</title>
 </head>
 
-
-
 <body>
-  <!-- My html code -->
   <h1 class="tit" id="abc">Chat Room</h1>
 
- 
+  <div id="mocha"></div>
+  <script src="https://unpkg.com/chai/chai.js"></script>
+  <script src="https://unpkg.com/mocha/mocha.js"></script>
+  <script class="mocha-test">
+      mocha.setup('tdd');
+  </script> 
+  <script src="mytest.js"></script>
+  <script class="mocha-exec">
+     //mocha.run();
+  </script>
 
 <div class="user" id="iptbtn">
     <input type="text" id="name" class="ipt">
     <button id="setname" class="btn">Join Chat</button>
-</br>
     <input type="text" id="text" class="ipt">
     <button id="btn" type="button" class="btn2">Send</button> 
   </div>
 
     <div id="backinfo" class="mess"></div>
-
-    <!-- My Javascript code -->
-    <script>
-      var ws=null;
-      document.getElementById('setname').onclick = function() {
+   <script>  
+        var ws=null;
+       document.getElementById('setname').onclick = function() {
          var name = document.getElementById('name').value;
          var time1= new Date().format("yyyy/MM/dd hh:mm:ss");
 
@@ -121,7 +126,7 @@
            
           ws = new WebSocket('ws://localhost:8888');
            
-          //Triggered when the connection is established.
+          //Triggered when the connection is established
            ws.onopen = function(){
 
 
@@ -150,7 +155,9 @@
        document.getElementById('name').setAttribute('disabled',true);
     }
 
-    function autocreate(data) {
+    
+
+      function autocreate(data) {
             var name = data.name;
             var text = data.text;
             var time = data.time;
@@ -172,10 +179,44 @@
             span2.setAttribute("id","2span");
             return div;
         }
-       
+        
+         //Send message and date info
+          function send() {
+            var time2= new Date().format("yyyy/MM/dd hh:mm:ss");
+            var text=document.getElementById('text');
+                if(text.value === '')return;
+                ws.send(JSON.stringify({
+                 text:text.value,
+                 time:time2,
+                 type:"chat"
+            }));             
+          text.value = '';
+          }
+
+    //The format method is extended in the Date prototype to make it easy to format the date format for output
+   Date.prototype.format = function(dtime) { 
+     var j = { 
+        "M+" : this.getMonth()+1,                 //Month
+        "d+" : this.getDate(),                    //Day 
+        "h+" : this.getHours(),                   //Hour 
+        "m+" : this.getMinutes(),                 //Minute 
+        "s+" : this.getSeconds(),                 //Second
+    }; 
+
+    //replace year
+    if(/(y+)/.test(dtime)) {
+      dtime=dtime.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+    }
+
+     for(var i in j) {
+        if(new RegExp("("+ i +")").test(dtime)){
+          dtime = dtime.replace(RegExp.$1, (RegExp.$1.length==1) ? (j[i]) : (("00"+ j[i]).substr((""+ j[i]).length)));
+         }
+     }
+    return dtime; 
+}     
 
     </script>
-   
     
 </body>
 </html>
