@@ -64,7 +64,7 @@ var nwt=require('nodejs-websocket');
       }
    });
 
-   //Automatically triggered when the user close the webpage or manually close the webpage connection
+   //Automatically triggered when the user closes the webpage or manually close the webpage connection
    conn.on('close', function() {    
 
     sendevery(JSON.stringify({
