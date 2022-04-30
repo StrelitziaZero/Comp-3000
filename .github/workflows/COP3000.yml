@@ -1,4 +1,4 @@
-name: ChatRoom
+name: COMP3000
 
 on:
   push:
